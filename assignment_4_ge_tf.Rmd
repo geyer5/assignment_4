@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 library(tidyverse)
 library(janitor)
+library(directlabels)
 
 lobster_data <- read_csv(("lobster_abundance_sbc_lter.csv"),
                          na = "-99999") %>% 
@@ -21,11 +22,19 @@ lobster_data <- read_csv(("lobster_abundance_sbc_lter.csv"),
   uncount(count)
 
 lobster_count <- lobster_data %>% 
-  group_by(site) %>% 
-  summarize(
-    lobster_count = count(site)
-  )
+  count(site, year)
   
+ggplot(data = lobster_count, aes(x = year, y = n)) +
+  geom_line(aes(color = site)) +
+  theme_minimal() +
+  labs(
+    x = "Year",
+    y = "Lobster Count",
+    title = "Lobster Abundance by Site"
+  )
+
+# Need to figure out how to designate by MPA 
+# IVEE and NAPL
 
 ```
 
